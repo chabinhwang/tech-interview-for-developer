@@ -1,3 +1,11 @@
-# ETC
+# 📦 ETC (기타 기술 지식)
 
-This section collects the ETC notes and also serves as the umbrella sidebar for Interview, Linux, New Technology, and Seminar content.
+Git 관리 전략부터 리눅스 운영체제 심화, 최근 IT 이슈 및 인공지능/빅데이터 기술 동향까지, **메인 카테고리에 속하지 않는 폭넓은 개발자 역량**을 다루는 공간입니다.
+좌측 사이드바를 통해 아래의 세부 카테고리별 개념을 확인하실 수 있습니다.
+
+### 📚 세부 카테고리
+*   **ETC (버전 관리/협업):** Git Commit Message Convention, GitHub Fork/미러링, Git/GitLab Flow 등 소스 코드 관리 전략
+*   **Interview (면접 대비):** 언어, 운영체제, 데이터베이스, 네트워크, 웹(스프링) 등 실전 면접 질문 모음
+*   **Linux (리눅스):** 리눅스 기본 명령어, 권한(Permission) 활용 등 서버 관리의 기초
+*   **New Technology (신기술 동향):** 인공지능(AI), 텐서플로우, 빅데이터 분석(DBSCAN), 최신 IT 이슈 및 반도체 동향
+*   **Seminar (세미나 요약):** NHN, 삼성전자, NCSOFT 등 주요 IT 기업들의 기술 컨퍼런스 핵심 내용

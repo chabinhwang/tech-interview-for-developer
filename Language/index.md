@@ -1,3 +1,10 @@
-# Language
+# 💻 Language (프로그래밍 언어)
 
-Use the sidebar to browse the language-specific sections for C, C++, Java, JavaScript, and Python.
+C, C++, Java, JavaScript, Python 등 **주요 프로그래밍 언어의 핵심 개념과 동작 원리**를 다루는 공간입니다.
+각 언어별 특징과 컴파일, 메모리 관리, 객체 지향 등의 주제를 좌측 사이드바에서 확인하실 수 있습니다.
+
+### 📚 세부 카테고리
+*   **C / C++:** 포인터, 메모리 할당, 얕은/깊은 복사, 가상 함수 등 시스템 프로그래밍과 메모리 제어
+*   **Java (자바):** JVM, Garbage Collection, 객체 지향, 예외 처리, 쓰레드, 스트림 API 등 엔터프라이즈 환경에서의 동작 방식
+*   **JavaScript (자바스크립트):** ES6+ 문법, 클로저, 프로토타입 기반 객체 지향, 비동기(Promise/Async) 등 프론트엔드/Node.js의 기반 기술
+*   **Python (파이썬):** 파이썬의 동적 타이핑과 유용한 매크로/라이브러리 활용법
