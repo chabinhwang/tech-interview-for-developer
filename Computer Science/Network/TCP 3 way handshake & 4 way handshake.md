@@ -6,7 +6,13 @@
 
 ### 3 way handshake - 연결 성립
 
-TCP는 정확한 전송을 보장해야 한다. 따라서 통신하기에 앞서, 논리적인 접속을 성립하기 위해 3 way handshake 과정을 진행한다.
+TCP는 연결 지향 프로토콜이므로 통신 전에 `3 way handshake`로 연결을 성립한다.
+
+이 과정의 목적은 단순히 "연결 시작"만이 아니다.
+
+- 양 끝이 서로 도달 가능한지 확인
+- 초기 sequence number를 동기화
+- MSS, Window Scale, SACK Permitted, Timestamp 같은 TCP 옵션 협상
 
 <img src="https://media.geeksforgeeks.org/wp-content/uploads/TCP-connection-1.png">
 
@@ -26,21 +32,21 @@ TCP는 정확한 전송을 보장해야 한다. 따라서 통신하기에 앞서
 
 ### 4 way handshake - 연결 해제
 
-연결 성립 후, 모든 통신이 끝났다면 해제해야 한다.
+TCP는 양방향(full-duplex) 통신이므로, 연결 해제도 각 방향이 독립적으로 종료된다. 그래서 보통 `4 way handshake`가 된다.
 
 <img src="https://media.geeksforgeeks.org/wp-content/uploads/CN.png">
 
-1) 클라이언트는 서버에게 연결을 종료한다는 FIN 플래그를 보낸다.
+1) 먼저 종료를 시작한 쪽(active closer)이 상대에게 `FIN`을 보낸다.
 
-2) 서버는 FIN을 받고, 확인했다는 ACK를 클라이언트에게 보낸다. (이때 모든 데이터를 보내기 위해 CLOSE_WAIT 상태가 된다)
+2) 상대는 이를 확인하는 `ACK`를 보낸다. 이때 상대는 남은 데이터를 더 보낼 수 있다. (예: `CLOSE_WAIT`)
 
-3) 데이터를 모두 보냈다면, 연결이 종료되었다는 FIN 플래그를 클라이언트에게 보낸다.
+3) 상대도 자신의 전송을 마치면 `FIN`을 보낸다.
 
-4) 클라이언트는 FIN을 받고, 확인했다는 ACK를 서버에게 보낸다. (TIME_WAIT 상태로 전환하여 서버가 ACK를 정상적으로 수신했는지 확인하고, 네트워크에 남아있는 지연된 패킷을 처리하기 위해 일정 시간 대기한다.)
+4) active closer는 마지막 `ACK`를 보내고 `TIME_WAIT` 상태로 들어간다.
 
-- 서버는 ACK를 받은 이후 소켓을 닫는다 (Closed)
+- 상대는 마지막 ACK를 받은 뒤 `CLOSED`로 간다.
 
-- TIME_WAIT 시간이 끝나면 클라이언트도 닫는다 (Closed)
+- `TIME_WAIT` 시간이 끝나면 active closer도 `CLOSED`가 된다.
 
 <br>
 
@@ -49,8 +55,19 @@ TCP는 정확한 전송을 보장해야 한다. 따라서 통신하기에 앞서
 <br>
 
 **참고: TIME_WAIT 상태**
-- 클라이언트는 마지막 ACK를 보낸 뒤 바로 연결을 종료하지 않고, TIME_WAIT 상태에서 2MSL(Maximum Segment Lifetime) 동안 대기한다.
-- 이유: (1) 지연된 패킷이 도착할 경우를 대비, (2) 마지막 ACK가 유실되었을 때 서버의 FIN 재전송에 응답하기 위함
+- 마지막 ACK를 보낸 쪽은 바로 연결을 완전히 닫지 않고 `TIME_WAIT` 상태에서 일정 시간 대기한다.
+- 흔히 `2MSL`이라고 설명하지만, 실제 대기 시간은 구현체마다 다를 수 있다.
+- 이유:
+  - 지연된 이전 세그먼트가 뒤늦게 도착하는 상황 방지
+  - 마지막 ACK가 유실되었을 때 상대의 FIN 재전송에 다시 ACK로 응답하기 위함
+
+<br>
+
+**참고: 예외 상황**
+
+- 경우에 따라 `RST`로 즉시 연결을 끊을 수 있다.
+- 양쪽이 거의 동시에 `FIN`을 보내는 simultaneous close도 가능하다.
+- `TIME_WAIT`에 들어가는 쪽은 항상 "클라이언트"가 아니라, `마지막 ACK를 보낸 active closer`이다.
 
 <br>
 
