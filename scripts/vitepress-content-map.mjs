@@ -11,7 +11,7 @@ const NAV_SECTIONS = [
     text: 'Computer Science',
     dir: 'Computer Science',
     prefixes: ['Computer Science'],
-    activeMatch: '^/Computer%20Science/'
+    activeMatch: '^/Computer Science/'
   },
   {
     text: 'Web',
@@ -35,7 +35,7 @@ const NAV_SECTIONS = [
     text: 'Design Pattern',
     dir: 'Design Pattern',
     prefixes: ['Design Pattern'],
-    activeMatch: '^/Design%20Pattern/'
+    activeMatch: '^/Design Pattern/'
   },
   {
     text: 'ETC',
@@ -83,7 +83,7 @@ export function buildVitePressContentMap() {
     const items = buildSectionSidebar(section.text)
 
     for (const prefix of section.prefixes) {
-      sidebar[encodeRoute(`/${prefix}/`)] = items
+      sidebar[`/${prefix}/`] = items
     }
   }
 
@@ -360,10 +360,10 @@ function toRoute(relativePath) {
 
   if (withoutExtension.endsWith('/index') || withoutExtension.endsWith('/README')) {
     const directory = withoutExtension.replace(/\/(index|README)$/, '')
-    return encodeRoute(`/${directory}/`)
+    return `/${directory}/`
   }
 
-  return encodeRoute(`/${withoutExtension}`)
+  return `/${withoutExtension}`
 }
 
 function encodeRoute(routePath) {
