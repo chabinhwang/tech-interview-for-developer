@@ -28,7 +28,7 @@ Collection은 외부 반복, Stream은 내부 반복이라고 했다. 두 차이
 
 **성능 면에서는 '내부 반복'**이 비교적 좋다. 내부 반복은 작업을 병렬 처리하면서 최적화된 순서로 처리해준다. 하지만 외부 반복은 명시적으로 컬렉션 항목을 하나씩 가져와서 처리해야하기 때문에 최적화에 불리하다.
 
-즉, Collection에서 병렬성을 이용하려면 직접 `synchronized`를 통해 관리해야만 한다.
+즉, Collection에서 병렬 처리를 하려면 스레드풀(ExecutorService), Fork/Join 프레임워크 등을 사용해야 하며, 공유 자원의 thread-safety를 위해 synchronized 등의 동기화가 필요하다.
 
 <br>
 
@@ -51,7 +51,7 @@ List<String> items = item.stream()
     			.filter(d->d.getPrices()>=1000)
                           .map(d->d.getName())
                           .limit(5)
-                          .collect(tpList());
+                          .collect(Collectors.toList());
 ```
 
 > filter와 map은 다른 연산이지만, 한 과정으로 병합된다.

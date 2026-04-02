@@ -42,7 +42,7 @@
 
   <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile6.uf.tistory.com%2Fimage%2F997E7F415A81490507F027">
 
-  기준테이블값과 조인테이블과 중복된 값을 보여준다.
+  왼쪽(기준) 테이블의 모든 값을 포함하고, 오른쪽(조인) 테이블과 매칭되는 값을 함께 보여준다. 오른쪽 테이블에 매칭되는 값이 없으면 NULL로 채워진다.
 
   왼쪽테이블 기준으로 JOIN을 한다고 생각하면 편하다.
 
@@ -116,6 +116,7 @@
   SELECT
   A.NAME, B.AGE
   FROM EX_TABLE A, EX_TABLE B
+  WHERE A.MANAGER_NO = B.NO_EMP
   ```
 
   

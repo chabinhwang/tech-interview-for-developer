@@ -8,7 +8,7 @@
 
 <br>
 
-CSR에는 모바일 시대에 들어서 SPA가 등장했다.
+모바일 시대에 들어서 CSR 방식을 활용한 SPA(Single Page Application)가 등장했다. (CSR은 렌더링 방식이고, SPA는 애플리케이션 아키텍처로 서로 다른 차원의 개념)
 
 ##### SPA(Single Page Applictaion)
 

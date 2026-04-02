@@ -63,7 +63,7 @@ function makeFunc() {
 var myFunc = makeFunc();
 myFunc();
 ```
-위의 예제는 처음의 init() 함수와 같은 효과를 가진다. 차이점은 inner function인 displayName()이 outer function이 실행되기 이전에 return 되었다는 것이다.
+위의 예제는 처음의 init() 함수와 같은 효과를 가진다. 차이점은 inner function인 displayName()이 outer function이 실행을 완료(종료)하기 전에 return 되었다는 것이다.
 
 다른 programming language에서는 함수의 local variable은 함수가 실행되는 동안에서만 존재한다. makeFunc()가 호출되고 끝난다음에 더 이상 name 변수에 접근하지 못해야 할 것 같지만 JavaScript에서는 그렇지 않다.
 

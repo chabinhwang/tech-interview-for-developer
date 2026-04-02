@@ -24,7 +24,7 @@
 - `v[index];` : index번째 원소 참조 (범위 점검 x)
 - `v.front(); v.back();` : 첫번째와 마지막 원소 참조
 - `v.clear();` : 모든 원소 제거 (메모리는 유지)
-- `v.push_back(data); v.pop_back(data);` : 마지막 원소 뒤에 data 삽입, 마지막 원소 제거
+- `v.push_back(data); v.pop_back();` : 마지막 원소 뒤에 data 삽입, 마지막 원소 제거
 - `v.begin(); v.end();` : 첫번째 원소, 마지막의 다음을 가리킴 (iterator 필요)
 - `v.resize(n);` : n으로 크기 변경
 - `v.size();` : vector 원소 개수 리턴

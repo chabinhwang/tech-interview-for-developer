@@ -148,21 +148,29 @@ int delete_max_heap() {
     
     for(int i = 1; i*2 <= heapSize;) {
         
-        // 마지막 노드가 왼쪽 노드와 오른쪽 노드보다 크면 끝
-        if(maxHeap[i] > maxHeap[i*2] && maxHeap[i] > maxHeap[i*2+1]) {
-            break;
+        // 오른쪽 자식이 존재하는 경우
+        if(i*2+1 <= heapSize) {
+            // 마지막 노드가 왼쪽 노드와 오른쪽 노드보다 크면 끝
+            if(maxHeap[i] > maxHeap[i*2] && maxHeap[i] > maxHeap[i*2+1]) {
+                break;
+            }
+            // 왼쪽 노드가 더 큰 경우, swap
+            else if (maxHeap[i*2] > maxHeap[i*2+1]) {
+                swap(i, i*2);
+                i = i*2;
+            }
+            // 오른쪽 노드가 더 큰 경우
+            else {
+                swap(i, i*2+1);
+                i = i*2+1;
+            }
         }
-        
-        // 왼쪽 노드가 더 큰 경우, swap
-        else if (maxHeap[i*2] > maxHeap[i*2+1]) {
-            swap(i, i*2);
-            i = i*2;
-        }
-        
-        // 오른쪽 노드가 더 큰 경우
+        // 왼쪽 자식만 존재하는 경우
         else {
-            swap(i, i*2+1);
-            i = i*2+1;
+            if(maxHeap[i] < maxHeap[i*2]) {
+                swap(i, i*2);
+            }
+            break;
         }
     }
     

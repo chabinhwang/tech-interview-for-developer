@@ -27,7 +27,7 @@ design smell이란 나쁜 디자인을 나타내는 증상같은 것이다.
 위의 design smell은 곧 나쁜 디자인을 의미한다.(스파게티 코드)
 
 # Robert C. Martin's Software design principles(SOLID)
-Robejt C. Martin은 5가지 Software design principles을 정의하였고 앞글자를 따서 SOLID라고 부른다.
+Robert C. Martin은 5가지 Software design principles을 정의하였고 앞글자를 따서 SOLID라고 부른다.
 
 ## Single Responsibility Principle(SRP)
 A class should have one, and only one, reason to change  
@@ -64,7 +64,7 @@ Software entities (classes, modules, functions, etc) should be open for extensio
 ![](https://images.velog.io/images/whow1101/post/567b0348-8bad-40a4-baf7-065baf6330a7/overview_pattern_4.PNG)
 ```java
 void incAll(Employee[] emps) {
-    for (int i=0; i<emps.size(); i++) {
+    for (int i=0; i<emps.length; i++) {
         if(emps[i].empType == FACULTY)
             incFacultySalary((FACULTY)emps[i])
         else if(emps[i].empType == STAFF)

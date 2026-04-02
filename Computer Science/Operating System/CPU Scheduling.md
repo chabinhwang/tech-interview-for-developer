@@ -46,6 +46,7 @@
     2. SJF (Shortest Job First)
         - 수행시간이 가장 짧다고 판단되는 작업을 먼저 수행
         - FCFS 보다 평균 대기 시간 감소, 짧은 작업에 유리
+        - 선점 버전으로 SRTF(Shortest Remaining Time First)가 있음: 현재 실행 중인 프로세스의 남은 시간보다 더 짧은 프로세스가 도착하면 CPU를 빼앗김
     3. HRN (Hightest Response-ratio Next)
         - 우선순위를 계산하여 점유 불평등을 보완한 방법(SJF의 단점 보완)
         - 우선순위 = (대기시간 + 실행시간) / (실행시간)
@@ -53,6 +54,7 @@
 - 선점 스케줄링
     1. Priority Scheduling
         - 정적/동적으로 우선순위를 부여하여 우선순위가 높은 순서대로 처리
+        - 선점 방식과 비선점 방식 모두 존재함. 선점 방식은 더 높은 우선순위의 프로세스가 도착하면 CPU를 빼앗고, 비선점 방식은 현재 프로세스가 끝날 때까지 대기
         - 우선 순위가 낮은 프로세스가 무한정 기다리는 Starvation 이 생길 수 있음
         - Aging 방법으로 Starvation 문제 해결 가능
     2. Round Robin

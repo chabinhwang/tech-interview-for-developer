@@ -42,7 +42,7 @@
 
      > 인터페이스가 잘 분리되어서, 클래스가 꼭 필요한 인터페이스만 구현하도록 해야함.
 
-  5. ##### Dependency Inversion Property
+  5. ##### Dependency Inversion Principle
 
      > 상위 모듈이 하위 모듈에 의존하면 안됨.
      >

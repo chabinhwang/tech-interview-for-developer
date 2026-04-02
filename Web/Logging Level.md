@@ -4,7 +4,7 @@
 
 보통 log4j 라이브러리를 활용한다.
 
-크게 ERROR, WARN, INFO, DEBUG로 로그 레벨을 나누어 작성한다.
+크게 TRACE, DEBUG, INFO, WARN, ERROR, FATAL로 로그 레벨을 나누어 작성한다. (TRACE < DEBUG < INFO < WARN < ERROR < FATAL 순으로 심각도가 높아짐)
 
 <br>
 

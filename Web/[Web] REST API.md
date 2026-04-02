@@ -15,6 +15,7 @@ REST : 웹 (HTTP) 의 장점을 활용한 아키텍쳐
     | POST   | Create | No         |
     | GET    | Select | Yes        |
     | PUT    | Update | Yes        |
+    | PATCH  | Update | No         |
     | DELETE | Delete | Yes        |
 
     > Idempotent : 한 번 수행하냐, 여러 번 수행했을 때 결과가 같나?

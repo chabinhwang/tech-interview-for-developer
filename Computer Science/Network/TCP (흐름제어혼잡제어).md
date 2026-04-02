@@ -50,7 +50,7 @@
 
     - <img src='https://t1.daumcdn.net/cfile/tistory/263B7D4E5715ECEB32'>
 
-  - Sliding Window (Go Back N ARQ) 
+  - Sliding Window
 
     - 수신측에서 설정한 윈도우 크기만큼 송신측에서 확인응답없이 세그먼트를 전송할 수 있게 하여 데이터 흐름을 동적으로 조절하는 제어기법
 
@@ -103,7 +103,7 @@
   - Slow Start (느린 시작)
     - AIMD 방식이 네트워크의 수용량 주변에서는 효율적으로 작동하지만, 처음에 전송 속도를 올리는데 시간이 오래 걸리는 단점이 존재했다.
     - Slow Start 방식은 AIMD와 마찬가지로 패킷을 하나씩 보내면서 시작하고, 패킷이 문제없이 도착하면 각각의 ACK 패킷마다 window size를 1씩 늘려준다. 즉, 한 주기가 지나면 window size가 2배로 된다. 
-    - 전송속도는 AIMD에 반해 지수 함수 꼴로 증가한다. 대신에 혼잡 현상이 발생하면 window size를 1로 떨어뜨리게 된다.
+    - 전송속도는 AIMD에 반해 지수 함수 꼴로 증가한다. 대신에 타임아웃으로 인한 혼잡 현상이 발생하면 window size를 1로 떨어뜨리게 된다. 반면, 3개의 중복 ACK를 수신한 경우(Fast Recovery)에는 window size를 절반으로 줄이고 선형 증가시킨다.
     - 처음에는 네트워크의 수용량을 예상할 수 있는 정보가 없지만, 한번 혼잡 현상이 발생하고 나면 네트워크의 수용량을 어느 정도 예상할 수 있다. 
     - 그러므로 혼잡 현상이 발생하였던 window size의 절반까지는 이전처럼 지수 함수 꼴로 창 크기를 증가시키고 그 이후부터는 완만하게 1씩 증가시킨다.
   - Fast Retransmit (빠른 재전송)
@@ -119,5 +119,5 @@
 [ref]<br>
 
 - <https://www.brianstorti.com/tcp-flow-control/>
-- <https://www.brianstorti.com/tcp-flow-control/>
+- <https://www.brianstorti.com/tcp-congestion-control/>
 

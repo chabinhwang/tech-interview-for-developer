@@ -79,7 +79,7 @@ int main(void) {
   - `(int*)` : malloc의 반환형이 void*이므로 형변환
   - `sizeof(int)` : sizeof는 괄호 안 자료형 타입을 바이트로 연산해줌
   - `*4` : 4를 곱한 이유는, arr[4]가 가진 동일한 크기의 메모리를 할당하기 위해
-  - `free[pArr]` : 다 사용하면 꼭 메모리 해제
+  - `free(pArr)` : 다 사용하면 꼭 메모리 해제
 
 <br>
 

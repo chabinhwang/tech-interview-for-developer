@@ -12,7 +12,7 @@
 4. JVM 개선
     1. JVM 에 의해 크기가 결정되던 Permanent Heap 삭제
     2. OS 가 자동 조정하는 Native 메모리 영역인 Metaspace 추가
-    3. `Default GC` Serial GC -> Parallel GC (멀티 스레드 방식)
+    3. `Default GC` Serial GC -> Parallel GC (멀티 스레드 방식) (참고: Parallel GC는 Java 5(JDK 1.5)부터 server VM의 기본 GC였으며, Java 8에서 새롭게 변경된 것은 아님. Java 9부터 G1 GC가 기본 GC로 변경됨)
 
 ## Java 9
 

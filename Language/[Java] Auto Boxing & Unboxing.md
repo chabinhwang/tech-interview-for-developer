@@ -18,10 +18,10 @@
 ```JAVA
 // 박싱
 int i = 10;
-Integer num = new Integer(i);
+Integer num = Integer.valueOf(i);
 
 // 언박싱
-Integer num = new Integer(10);
+Integer num = Integer.valueOf(10);
 int i = num.intValue();
 ```
 
@@ -41,7 +41,7 @@ int i = 10;
 Integer num = i;
 
 // 오토 언박싱
-Integer num = new Integer(10);
+Integer num = Integer.valueOf(10);
 int i = num;
 ```
 

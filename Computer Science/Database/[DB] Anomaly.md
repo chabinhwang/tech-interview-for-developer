@@ -6,7 +6,7 @@
 >
 > 이 페이지에서는 Anomaly가 무엇인지 살펴본다.
 
-예) {Student ID, Course ID, Department, Course ID, Grade}
+예) {Student ID, Course ID, Department, Grade}
 
 1. 삽입 이상 (Insertion Anomaly)
 

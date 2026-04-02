@@ -25,7 +25,7 @@ Java 8은 가장 큰 변화가 있던 버전이다.
 
 <br>
 
-Stream API는 병렬 연산을 지원하는 API다. 이제 기존에 병렬 처리를 위해 사용하던 `synchronized`를 사용하지 않아도 된다. synchronized는 에러를 유발할 가능성과 비용 측면에서 문제점이 많은 단점이 있었다.
+Stream API는 병렬 연산을 지원하는 API다. parallelStream()을 통해 내부적으로 ForkJoinPool을 사용하여 병렬 처리가 가능하다. 단, 공유 가변 상태(shared mutable state)에 접근하는 경우에는 여전히 동기화가 필요하며, Stream이 synchronized를 완전히 대체하는 것은 아니다.
 
 Stream API는 주어진 항목들을 연속으로 제공하는 기능이다. 파이프라인을 구축하여, 진행되는 순서는 정해져있지만 동시에 작업을 처리하는 것이 가능하다. 
 

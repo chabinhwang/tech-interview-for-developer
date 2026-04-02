@@ -67,7 +67,7 @@ public Object pop() {
 }
 ```
 
-스택 포인터가 0이 되면 null로 return;
+스택 포인터가 -1이면 비어있으므로 null을 return;
 
 아니면 스택의 최상위 위치 값을 꺼내옴
 
@@ -124,7 +124,7 @@ public void push(Object o) {
         MAX_SIZE *= 2; // 2배로 증가
     }
     
-    stack[sp++] = o;
+    stack[++sp] = o;
 }
 ```
 
@@ -312,8 +312,8 @@ public Object deQueue(Object o) {
         return null;
     }
     
-    Object o = queue[front];
-    queue[front++] = null;
+    Object o = queue[++front];
+    queue[front] = null;
     return o;
 }
 ```

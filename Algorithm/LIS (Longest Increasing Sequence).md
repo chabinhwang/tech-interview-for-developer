@@ -1,4 +1,4 @@
-## LIS (Longest Increasing Sequence)
+## LIS (Longest Increasing Subsequence)
 
 > 최장 증가 수열 : 가장 긴 증가하는 부분 수열
 

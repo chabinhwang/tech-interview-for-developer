@@ -17,7 +17,7 @@ SELECT * FROM USER WHERE ID = "abc" AND PASSWORD = "1234";
 SQL Injection으로 공격할 때, input 창에 비밀번호를 입력함과 동시에 다른 쿼리문을 함께 입력하는 것이다.
 
 ```
-1234; DELETE * USER FROM ID = "1";
+1234; DELETE FROM USER WHERE ID = "1";
 ```
 
 보안이 완벽하지 않은 경우, 이처럼 비밀번호가 아이디와 일치해서 True가 되고 뒤에 작성한 DELETE 문도 데이터베이스에 영향을 줄 수도 있게 되는 치명적인 상황이다.

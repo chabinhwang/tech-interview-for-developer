@@ -8,13 +8,13 @@
     - Boolean : typeof instance === 'boolean'
     - Number : typeof instance === 'number'
     - String : typeof instance === 'string'
-    - BitInt : typeof instance === 'bigint'
+    - BigInt : typeof instance === 'bigint'
     - Symbol : typeof instance === 'symbol'
 - Structural Types
     - Object : typeof instance === 'object'
-    - Fuction : typeof instance === 'fuction'
+    - Function : typeof instance === 'function'
 - Structural Root Primitive
-    - null : typeof instance === 'obejct'
+    - null : typeof instance === 'object'
 
 기본적인 것은 설명하지 않으며, 놓칠 수 있는 부분만 설명하겠다.
 
@@ -32,7 +32,7 @@ console.log(1 === 1.0); // true
 
 ### BigInt Type
 
-BigInt type은 number type의 범위를 넘어가는 숫자를 안전하게 저장하고 실행할 수 있게 해준다. BitInt는 n을 붙여 할당할 수 있다.
+BigInt type은 number type의 범위를 넘어가는 숫자를 안전하게 저장하고 실행할 수 있게 해준다. BigInt는 n을 붙여 할당할 수 있다.
 
 ```jsx
 const x = 2n ** 53n;
@@ -41,7 +41,7 @@ const x = 2n ** 53n;
 
 ### Symbol Type
 
-Symbol Type은 **unique**하고 **immutable** 하다. 이렇나 특성 때문에 주로 이름이 충돌할 위험이 없는 obejct의 유일한 property key를 만들기 위해서 사용된다.
+Symbol Type은 **unique**하고 **immutable** 하다. 이렇나 특성 때문에 주로 이름이 충돌할 위험이 없는 object의 유일한 property key를 만들기 위해서 사용된다.
 
 ```jsx
 var key = Symbol('key');
