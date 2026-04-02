@@ -2,50 +2,55 @@
 
 ---
 
-> I/O 작업은 Kernel level에서만 수행할 수 있다. 따라서, Process, Thread는 커널에게 I/O를 요청해야 한다.
+일반적인 운영체제 환경에서 애플리케이션은 시스템 콜을 통해 커널에 I/O를 요청한다.
 
 <br>
 
 1. #### Blocking I/O
 
-   I/O Blocking 형태의 작업은 
+   `read`, `recv`, `accept` 같은 호출이 완료될 때까지 `호출한 스레드`가 반환되지 않는 방식이다.
 
-   (1) Process(Thread)가 Kernel에게 I/O를 요청하는 함수를 호출
+   * 진행 순서
 
-   (2) Kernel이 작업을 완료하면 작업 결과를 반환 받음.
-
-   
+     1. Process(Thread)가 커널에 I/O 시스템 콜을 요청한다.
+     2. 데이터가 준비되거나 연결이 들어오는 등, 요청한 조건이 만족될 때까지 해당 스레드는 잠든다.
+     3. 커널이 작업을 완료하면 스레드를 깨우고 결과를 반환한다.
 
    * 특징
-     * I/O 작업이 진행되는 동안 user Process(Thread) 는 자신의 작업을 중단한 채 대기
-     * Resource 낭비가 심함 <br>(I/O 작업이 CPU 자원을 거의 쓰지 않으므로)
+     * 요청한 스레드는 I/O가 끝날 때까지 그 호출에서 빠져나오지 못한다.
+     * CPU를 계속 태우는 것은 아니지만, 연결마다 스레드를 오래 붙잡는 구조는 고동시성에서 메모리 사용량과 컨텍스트 스위칭 비용이 커질 수 있다.
 
-   <br>
-
-   `여러 Client 가 접속하는 서버를 Blocking 방식으로 구현하는 경우` -> I/O 작업을 진행하는 작업을 중지 -> 다른 Client가 진행중인 작업을 중지하면 안되므로, client 별로 별도의 Thread를 생성해야 함 -> 접속자 수가 매우 많아짐
-
-   이로 인해, 많아진 Threads 로 *컨텍스트 스위칭 횟수가 증가함,,, 비효율적인 동작 방식*
+   `여러 Client가 접속하는 서버를 단순 Blocking 방식`으로 만들면, 연결마다 스레드 또는 프로세스를 할당하는 구조가 되기 쉽다. 이 방식은 구현은 단순하지만 연결 수가 많아질수록 확장성이 떨어진다.
 
    <br>
 
 2. #### Non-Blocking I/O
 
-   I/O 작업이 진행되는 동안 User Process의 작업을 중단하지 않음. 
+   시스템 콜이 즉시 반환되는 방식이다. 아직 처리할 수 없는 상태라면 `EAGAIN` 또는 `EWOULDBLOCK` 같은 결과를 돌려준다.
 
    * 진행 순서
 
-     1. User Process가 recvfrom 함수 호출 (커널에게 해당 Socket으로부터 data를 받고 싶다고 요청함)
+     1. User Process가 `recvfrom` 같은 함수를 호출한다.
+     2. 아직 읽을 데이터가 없으면 커널은 즉시 `EAGAIN`/`EWOULDBLOCK`을 반환한다.
+     3. 애플리케이션은 다른 작업을 계속 수행할 수 있다.
+     4. 소켓이 읽기 가능한 시점이 오면 다시 `recvfrom`을 호출해 커널 버퍼의 데이터를 사용자 버퍼로 복사한다.
+     5. 복사가 끝나면 읽은 바이트 수를 반환한다.
 
-     2. Kernel은 이 요청에 대해서, 곧바로 recvBuffer를 채워서 보내지 못하므로, "EWOULDBLOCK"을 return함.
+   * 특징
+     * 호출 시 바로 반환되므로 한 스레드가 여러 연결을 다루기 쉽다.
+     * 대신 준비되지 않은 소켓을 계속 확인하면 busy waiting이 되기 쉬우므로, 보통 `select`, `poll`, `epoll`, `kqueue` 같은 readiness notification과 함께 사용한다.
 
-     3. Blocking 방식과 달리, User Process는 다른 작업을 진행할 수 있음.
+<br>
 
-     4. recvBuffer에 user가 받을 수 있는 데이터가 있는 경우, Buffer로부터 데이터를 복사하여 받아옴.
+#### 정리
 
-        > 이때, recvBuffer는 Kernel이 가지고 있는 메모리에 적재되어 있으므로, Memory간 복사로 인해, I/O보다 훨씬 빠른 속도로 data를 받아올 수 있음.
+- `Blocking I/O`는 `호출한 스레드가 잠드는 방식`
+- `Non-Blocking I/O`는 `시스템 콜이 즉시 반환되는 방식`
 
-     5. recvfrom 함수는 빠른 속도로 data를 복사한 후, 복사한 data의 길이와 함께 반환함.
+참고로 `Non-Blocking I/O`와 `Asynchronous I/O`는 같은 말이 아니다.
 
+- `Non-Blocking I/O`는 보통 애플리케이션이 준비 상태를 확인한 뒤 다시 읽거나 쓴다.
+- `Asynchronous I/O`는 커널이나 런타임이 완료 시점을 나중에 통지해주는 모델에 가깝다.
 
 
 

@@ -1,6 +1,6 @@
 ## 로드 밸런싱(Load Balancing)
 
-> 둘 이상의 CPU or 저장장치와 같은 컴퓨터 자원들에게 작업을 나누는 것
+> 여러 서버 또는 컴퓨팅 자원에 트래픽과 작업을 분산하는 것
 
 <br>
 
@@ -12,7 +12,15 @@
 
 <br>
 
-**로드 밸런싱**은 분산식 웹 서비스로, 여러 서버에 부하(Load)를 나누어주는 역할을 한다. Load Balancer를 클라이언트와 서버 사이에 두고, 부하가 일어나지 않도록 여러 서버에 분산시켜주는 방식이다. 서비스를 운영하는 사이트의 규모에 따라 웹 서버를 추가로 증설하면서 로드 밸런서로 관리해주면 웹 서버의 부하를 해결할 수 있다.
+**로드 밸런싱**은 여러 서버에 부하(Load)를 분산해 가용성과 확장성을 높이는 방식이다. 보통 클라이언트와 백엔드 서버 사이에 `Load Balancer`를 두고, 요청을 적절한 서버로 전달한다.
+
+로드 밸런서는 보통 다음 기능도 함께 수행한다.
+
+- 헬스 체크
+- 장애 서버 제외
+- SSL/TLS 종료(TLS termination)
+- 세션 고정(Sticky Session)
+- L4/L7 기반 라우팅
 
 <br>
 
@@ -20,15 +28,19 @@
 
 - 라운드 로빈(Round Robin) : CPU 스케줄링의 라운드 로빈 방식 활용
 - Least Connections : 연결 개수가 가장 적은 서버 선택 (트래픽으로 인해 세션이 길어지는 경우 권장)
-- Source : 사용자 IP를 해싱하여 분배 (특정 사용자가 항상 같은 서버로 연결되는 것 보장)
+- Source IP Hash : 사용자 IP를 해싱하여 분배 (특정 사용자가 항상 같은 서버로 연결되도록 할 때 사용)
+- Weighted 방식 : 서버 성능 차이를 반영해 가중치를 두고 분배
 
 <br>
 
 #### 로드 밸런서 장애 대비
 
-서버를 분배하는 로드 밸런서에 문제가 생길 수 있기 때문에 로드 밸런서를 이중화하여 대비한다.
+로드 밸런서 자체가 단일 장애점(SPOF)이 될 수 있으므로 이중화가 필요하다.
 
-> Active 상태와 Passive 상태
+- Active-Standby(Active-Passive)
+- Active-Active
+
+또한 DNS 기반 트래픽 분산, Anycast, 글로벌 로드 밸런싱(GSLB)처럼 더 넓은 범위의 분산 전략과 함께 사용되기도 한다.
 
 <br>
 
@@ -37,4 +49,3 @@
 - [링크](<https://www.educative.io/courses/grokking-the-system-design-interview/3jEwl04BL7Q>)
 
 - [링크](<https://nesoy.github.io/articles/2018-06/Load-Balancer>)
-
