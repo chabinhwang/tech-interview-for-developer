@@ -1,88 +1,106 @@
-### REST API 
+### REST API
 
-----
+REST는 Roy Fielding의 논문에서 제시된 `아키텍처 스타일`이다.
 
-REST : 웹 (HTTP) 의 장점을 활용한 아키텍쳐 
+실무에서 흔히 "REST API"라고 부르는 것은, 엄밀한 의미의 REST를 완벽히 만족한다기보다 `HTTP의 자원 중심 설계 원칙을 따른 API`를 뜻하는 경우가 많다.
 
-#### 1. REST (<u>RE</u>presentational <u>S</u>tate <u>T</u>ransfer) 기본
+<br>
 
-* REST의 요소
+#### 기본 요소
 
-  * Method
+##### 1. Resource
 
-    | Method | 의미   | Idempotent |
-    | ------ | ------ | ---------- |
-    | POST   | Create | No         |
-    | GET    | Select | Yes        |
-    | PUT    | Update | Yes        |
-    | PATCH  | Update | No         |
-    | DELETE | Delete | Yes        |
+- URI로 식별되는 자원
+- 보통 명사 형태로 표현한다.
 
-    > Idempotent : 한 번 수행하냐, 여러 번 수행했을 때 결과가 같나?
+예)
 
-    <br>
+- `/users`
+- `/users/1`
+- `/orders/42/items`
 
-  * Resource
+##### 2. Method
 
-    * http://myweb/users와 같은 URI
-    * 모든 것을 Resource (명사)로 표현하고, 세부 Resource에는 id를 붙임
+HTTP 메서드로 의도를 표현한다.
 
-    <br>
+| Method | 대표 의미 | Safe | Idempotent |
+| ------ | --------- | ---- | ---------- |
+| GET    | 조회      | Yes  | Yes        |
+| HEAD   | 헤더 조회 | Yes  | Yes        |
+| POST   | 생성/처리 | No   | No         |
+| PUT    | 전체 교체 | No   | Yes        |
+| PATCH  | 부분 수정 | No   | 구현에 따라 다름 |
+| DELETE | 삭제 요청 | No   | Yes        |
 
-  * Message
+`Idempotent`는 같은 요청을 여러 번 보내도 서버에 기대하는 최종 상태가 같다는 뜻이다.
 
-    * 메시지 포맷이 존재
+##### 3. Representation
 
-      : JSON, XML 과 같은 형태가 있음 (최근에는 JSON 을 씀)
+자원의 실제 전송 형식이다.
 
-      ```text
-      HTTP POST, http://myweb/users/
-      {
-      	"users" : {
-      		"name" : "terry"
-      	}
-      }
-      ```
+JSON, XML, HTML 등이 가능하며, 오늘날에는 JSON이 가장 흔하다.
 
-    <br>
+```http
+POST /users HTTP/1.1
+Content-Type: application/json
 
-* REST 특징
+{
+  "name": "terry"
+}
+```
 
-  * Uniform Interface
+<br>
 
-    * HTTP 표준만 맞는다면, 어떤 기술도 가능한 Interface 스타일
+#### REST의 주요 제약
 
-      예) REST API 정의를 HTTP + JSON로 하였다면, C, Java, Python, IOS 플랫폼 등 특정 언어나 기술에 종속 받지 않고, 모든 플랫폼에 사용이 가능한 Loosely Coupling 구조
+##### Client-Server
 
-    * 포함
-      * Self-Descriptive Messages
+클라이언트와 서버의 책임을 분리한다.
 
-        * API 메시지만 보고, API를 이해할 수 있는 구조 (Resource, Method를 이용해 무슨 행위를 하는지 직관적으로 이해할 수 있음)
+##### Stateless
 
-      * HATEOAS(Hypermedia As The Engine Of Application State)
+각 요청은 그 자체로 이해 가능해야 하며, 서버는 이전 요청의 애플리케이션 상태에 강하게 의존하지 않아야 한다.
 
-        * Application의 상태(State)는 Hyperlink를 통해 전이되어야 함.
-        * 서버는 현재 이용 가능한 다른 작업에 대한 하이퍼링크를 포함하여 응답해야 함.
+이는 "인증 정보를 절대 저장하지 않는다"는 뜻이 아니라, `요청 처리를 위해 필요한 상태를 요청 또는 외부 저장소를 통해 일관되게 다룬다`는 의미에 가깝다.
 
-      * Resource Identification In Requests
+##### Cacheable
 
-      * Resource Manipulation Through Representations
+가능한 응답은 캐시 가능해야 한다.
 
-  * Statelessness
+##### Uniform Interface
 
-    * 즉, HTTP Session과 같은 컨텍스트 저장소에 **<u>상태 정보 저장 안함</u>**
-    * **<u>Request만 Message로 처리</u>**하면 되고, 컨텍스트 정보를 신경쓰지 않아도 되므로, **<u>구현이 단순해짐</u>**.
+자원을 URI로 식별하고, 표준 HTTP 의미를 일관되게 사용한다.
 
-    * 따라서, REST API 실행중 실패가 발생한 경우, Transaction 복구를 위해 기존의 상태를 저장할 필요가 있다. (POST Method 제외)
+여기에 self-descriptive messages, representation 기반 조작, HATEOAS 같은 개념이 포함된다.
 
-  * Resource 지향 아키텍쳐 (ROA : Resource Oriented Architecture)
+##### Layered System
 
-    * Resource 기반의 복수형 명사 형태의 정의를 권장.
-  
-  * Client-Server Architecture
-  
-  * Cache Ability
-  
-  * Layered System
-  
-  * Code On Demand(Optional)
+프록시, 게이트웨이, 로드 밸런서 같은 중간 계층을 둘 수 있다.
+
+##### Code on Demand
+
+선택적 제약이다. 서버가 클라이언트에 실행 코드를 전달할 수 있다는 개념이다.
+
+<br>
+
+#### 자주 하는 오해
+
+##### REST = HTTP + JSON 인가?
+
+아니다.
+
+HTTP와 JSON은 RESTful한 시스템을 만드는 데 자주 쓰이는 조합일 뿐이다.
+
+##### 모든 HTTP API가 REST인가?
+
+아니다.
+
+URI와 메서드를 쓴다고 자동으로 REST가 되는 것은 아니다. 상태 관리, 캐시, 자원 표현, 일관된 인터페이스 같은 제약을 얼마나 지키는지가 중요하다.
+
+<br>
+
+#### 실무 팁
+
+- URI에는 동사보다 명사를 우선한다.
+- 상태 변경 작업은 safe method인 `GET`으로 만들지 않는다.
+- 성공/실패를 HTTP 상태 코드로 표현하고, 응답 본문은 일관된 포맷으로 유지한다.

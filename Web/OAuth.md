@@ -2,49 +2,74 @@
 
 > Open Authorization
 
-인터넷 사용자들이 비밀번호를 제공하지 않고, 다른 웹사이트 상의 자신들의 정보에 대해 웹사이트나 애플리케이션의 접근 권한을 부여할 수있는 개방형 표준 방법
+OAuth 2.0은 사용자의 비밀번호를 클라이언트 애플리케이션에 직접 넘기지 않고, 제한된 권한을 위임할 수 있게 하는 표준 프레임워크다.
 
-> **참고**: 아래 인증 과정은 **OAuth 1.0** 기준의 흐름(Request Token → Access Token)이다. 현재 널리 사용되는 **OAuth 2.0**은 요청 토큰 단계가 없으며, Authorization Code Grant, Implicit Grant, Client Credentials Grant 등 다양한 인가 방식을 제공하고 HTTPS를 필수로 사용하여 서명 과정을 단순화한 것이 주요 차이점이다.
-
-<br>
-
-이러한 매커니즘은 구글, 페이스북, 트위터 등이 사용하고 있으며 타사 애플리케이션 및 웹사이트의 계정에 대한 정보를 공유할 수 있도록 허용해준다.
+즉, 핵심 목적은 `인증(authentication)` 자체보다 `인가(authorization)`에 있다.
 
 <br>
 
-<br>
+### 핵심 역할
 
-#### 사용 용어
+- `Resource Owner`: 보호된 자원의 소유자. 보통 사용자다.
+- `Client`: 사용자를 대신해 권한을 요청하는 애플리케이션이다.
+- `Authorization Server`: 사용자 로그인, 동의, 토큰 발급을 담당한다.
+- `Resource Server`: 실제 API와 데이터를 제공한다.
 
----
-
-- **사용자** : 계정을 가지고 있는 개인
-- **소비자** : OAuth를 사용해 서비스 제공자에게 접근하는 웹사이트 or 애플리케이션
-- **서비스 제공자** : OAuth를 통해 접근을 지원하는 웹 애플리케이션
-- **소비자 비밀번호** : 서비스 제공자에서 소비자가 자신임을 인증하기 위한 키
-- **요청 토큰** : 소비자가 사용자에게 접근권한을 인증받기 위해 필요한 정보가 담겨있음
-- **접근 토큰** : 인증 후에 사용자가 서비스 제공자가 아닌 소비자를 통해 보호 자원에 접근하기 위한 키 값
+인가 서버와 리소스 서버는 같은 시스템일 수도, 분리된 시스템일 수도 있다.
 
 <br>
 
-토큰 종류로는 Access Token과 Refresh Token이 있다.
+### 토큰
 
-Access Token은 만료시간이 있고 끝나면 다시 요청해야 한다. Refresh Token은 만료되면 아예 처음부터 진행해야 한다. 
+- `Access Token`: 리소스 서버 호출에 사용한다.
+- `Refresh Token`: 만료된 access token을 재발급받는 데 사용한다.
+
+중요한 점은 refresh token은 보통 `인가 서버`에만 보내고, `리소스 서버`에는 보내지 않는다는 것이다.
+
+또한 access token의 형식은 OAuth가 규정하지 않는다. JWT일 수도 있고, opaque token일 수도 있다.
+
+<br>
+
+### 현재 권장되는 흐름
+
+실무에서 브라우저 앱, 모바일 앱, 데스크톱 앱 같은 `public client`는 보통 `Authorization Code Grant + PKCE`를 사용한다.
+
+1. 클라이언트가 사용자를 인가 서버의 authorization endpoint로 보낸다.
+2. 사용자가 로그인하고, 앱이 요청한 scope에 동의한다.
+3. 인가 서버가 클라이언트의 redirect URI로 `authorization code`를 돌려준다.
+4. 클라이언트가 code와 `code_verifier`를 token endpoint로 보내 access token을 발급받는다.
+5. 클라이언트는 access token으로 resource server를 호출한다.
+6. access token이 만료되면 refresh token으로 새 access token을 받을 수 있다.
+
+PKCE는 authorization code 탈취 위험을 줄이기 위한 확장이다.
 
 <br>
 
-#### 인증 과정
+### 자주 헷갈리는 점
 
----
+#### 1. OAuth는 로그인 표준인가?
 
-> 소비자 <-> 서비스 제공자
+정확히는 아니다. OAuth는 권한 위임 표준이다.
 
-1. 소비자가 서비스 제공자에게 요청토큰을 요청한다.
-2. 서비스 제공자가 소비자에게 요청토큰을 발급해준다.
-3. 소비자가 사용자를 서비스제공자로 이동시킨다. 여기서 사용자 인증이 수행된다.
-4. 서비스 제공자가 사용자를 소비자로 이동시킨다.
-5. 소비자가 접근토큰을 요청한다.
-6. 서비스제공자가 접근토큰을 발급한다.
-7. 발급된 접근토큰을 이용해서 소비자에서 사용자 정보에 접근한다.
+소셜 로그인처럼 "누구인지"까지 표준화해서 받고 싶다면 `OpenID Connect (OIDC)`를 OAuth 2.0 위에 올려서 사용한다.
+
+#### 2. OAuth 2.0에도 Request Token이 있나?
+
+아니다. `Request Token -> Access Token` 흐름은 OAuth 1.0에서 보던 개념이다.
+
+OAuth 2.0의 대표 흐름은 `Authorization Code -> Access Token`이다.
+
+#### 3. Implicit Grant는 아직 추천되나?
+
+새 시스템에서는 일반적으로 추천되지 않는다.
+
+현재는 브라우저 기반 앱도 보통 `Authorization Code + PKCE`를 사용한다.
 
 <br>
+
+### 요약
+
+- OAuth 2.0은 제3자 앱에 권한을 위임하는 표준이다.
+- 비밀번호 대신 토큰 기반으로 접근 권한을 전달한다.
+- 현대적인 기본 선택은 `Authorization Code + PKCE`다.
+- 로그인/사용자 식별이 목적이면 `OIDC`까지 함께 이해해야 한다.
