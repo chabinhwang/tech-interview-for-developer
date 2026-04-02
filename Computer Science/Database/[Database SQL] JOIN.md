@@ -2,9 +2,9 @@
 
 ##### 조인이란?
 
-> 두 개 이상의 테이블이나 데이터베이스를 연결하여 데이터를 검색하는 방법
+> 두 개 이상의 테이블(또는 서브쿼리 결과 집합)을 연결해 원하는 데이터를 조회하는 방법
 
-테이블을 연결하려면, 적어도 하나의 칼럼을 서로 공유하고 있어야 하므로 이를 이용하여 데이터 검색에 활용한다.
+보통 공통된 키 값이나 조건을 기준으로 연결한다. 단, `CROSS JOIN`처럼 조건 없이 모든 조합을 만드는 경우도 있다.
 
 <br>
 
@@ -74,7 +74,9 @@
 
   <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile24.uf.tistory.com%2Fimage%2F99195F345A8149391BE0C3">
 
-  합집합을 말한다. A와 B 테이블의 모든 데이터가 검색된다.
+  합집합에 해당한다. A와 B 테이블의 모든 행이 검색되며, 매칭되지 않는 쪽은 `NULL`로 채워진다.
+
+  단, 일부 DBMS(예: MySQL)는 `FULL OUTER JOIN` 문법을 직접 지원하지 않아 `UNION` 등으로 대체해야 한다.
 
   ```sql
   SELECT
@@ -106,17 +108,17 @@
 
   <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=http%3A%2F%2Fcfile25.uf.tistory.com%2Fimage%2F99341D335A8A363D0614E8">
 
-  자기자신과 자기자신을 조인하는 것이다.
+  자기 자신을 다시 조인하는 패턴이다.
 
-  하나의 테이블을 여러번 복사해서 조인한다고 생각하면 편하다.
+  하나의 테이블에 서로 다른 alias를 붙여 관계를 표현할 때 자주 사용한다.
 
   자신이 갖고 있는 칼럼을 다양하게 변형시켜 활용할 때 자주 사용한다.
 
-  ``` sql
+  ```sql
   SELECT
   A.NAME, B.AGE
-  FROM EX_TABLE A, EX_TABLE B
-  WHERE A.MANAGER_NO = B.NO_EMP
+  FROM EX_TABLE A
+  JOIN EX_TABLE B ON A.MANAGER_NO = B.NO_EMP
   ```
 
   
