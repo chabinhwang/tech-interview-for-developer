@@ -33,6 +33,9 @@ node_modules/
 npm-debug.log
 yarn-error.log
 yarn.log
+.vitepress/cache/
+.vitepress/dist/
+.vitepress/.temp/
 
 # Python
 __pycache__/

@@ -1,0 +1,18 @@
+{
+  "name": "tech-interview-for-developer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "docs:prepare": "node scripts/sync-vitepress-pages.mjs",
+    "predocs:dev": "npm run docs:prepare",
+    "predocs:build": "npm run docs:prepare",
+    "predocs:preview": "npm run docs:prepare",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
+    "docs:sidebar": "npm run docs:prepare && node scripts/vitepress-content-map.mjs"
+  },
+  "devDependencies": {
+    "vitepress": "1.6.4"
+  }
+}

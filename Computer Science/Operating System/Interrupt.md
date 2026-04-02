@@ -41,7 +41,7 @@
 
 #### 인터럽트 처리 과정
 
-<img src=" https://mblogthumb-phinf.pstatic.net/20160310_124/scw0531_14575366291105WjS7_PNG/ERTRTETRE.png?type=w2 ">
+<img src="https://mblogthumb-phinf.pstatic.net/20160310_124/scw0531_14575366291105WjS7_PNG/ERTRTETRE.png?type=w2" alt="Interrupt handling flow">
 
 1. 장치 신호나 예외가 발생한다.
 2. CPU는 현재 명령 흐름을 중단하고, 최소한의 실행 문맥(PC, 상태 레지스터 등)을 저장한 뒤 커널 모드의 핸들러로 진입한다.
