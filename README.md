@@ -1,71 +1,6 @@
 # tech-interview-for-developer
 
-[![Since](https://img.shields.io/badge/since-2019.03.01-333333.svg?style=flat-square)](https://gyoogle.github.io)
-[![author](https://img.shields.io/badge/author-gyoogle-0066FF.svg?style=flat-square)](https://gyoogle.github.io)
-[![LICENSE](https://img.shields.io/dub/l/vibe-d.svg?style=flat-square)](LICENSE)
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fgyoogle%2Fhit-counter&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
-[![All Contributors](https://img.shields.io/badge/all_contributors-58-orange.svg?style=flat-square)](#contributors)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-FF66FF.svg?style=flat-square)](http://makeapullrequest.com)
-
-[![Watch on GitHub](https://img.shields.io/github/watchers/gyoogle/tech-interview-for-developer.svg?style=social)](https://github.com/gyoogle/tech-interview-for-developer/watchers)
-[![Star on GitHub](https://img.shields.io/github/stars/gyoogle/tech-interview-for-developer.svg?style=social)](https://github.com/gyoogle/tech-interview-for-developer/stargazers)
-[![Fork on GitHub](https://img.shields.io/github/forks/gyoogle/tech-interview-for-developer.svg?style=social)](https://github.com/gyoogle/tech-interview-for-developer/network/members)
-
-<br>
-
-<br>
-
 ### 👶🏻 신입 개발자 전공 지식 & 기술 면접 백과사전 📖
-
-<br> 
-
-**Collaborator**
-
-| [<img src="https://avatars3.githubusercontent.com/u/34904741?s=460&u=c8b8b7954518e26abbcf5d29c69c5df0b5c53c1b&v=4" width="100">](https://github.com/gyoogle)| [<img src="https://avatars2.githubusercontent.com/u/46181475?s=460&u=16d868ed1e357e51e8ba9f6dbb77df53a8fbb945&v=4" width="100">](https://github.com/GimunLee) | [<img src="https://avatars2.githubusercontent.com/u/37679254?s=460&u=1a7ccc7bf9926d6ea1cc455d04dfb63e4ebceaec&v=4" width="100">](https://github.com/b2narae) |
-| :-----------------------------------: | :---------------------------------------: | :-------------------------------------: |
-
-<br>
-
-**Commit convention rule** : 날짜-[주제]-내용-상태
-
-`ex) 2019-10-14 [Algorithm] Sort Add/Update/Delete`
-
-<br>
-
-잘못된 내용은 [이슈](https://github.com/gyoogle/tech-interview-for-developer/issues)와 [PR](https://github.com/gyoogle/tech-interview-for-developer/pulls)로 알려주세요 💡
-
-<br>
-
-
-
-<center>🙏도움을 주신 분들🙏</center>
-
-<br>
-<br>
-
-<a href="https://github.com/gyoogle/tech-interview-for-developer/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=gyoogle/tech-interview-for-developer" />
-</a>
-
-<br>
-
-#### [💖후원하기💝](https://github.com/sponsors/gyoogle)
-
-<br>
-<br>
-
-## ⏩ ⏩ ⏩  [웹 사이트에서 편하게 공부하세요! Click!](https://gyoogle.dev/)  ⏪ ⏪ ⏪
-
-<br>
-<br>
-
-<br>
-
-### 👨🏻‍🏫 [기술 면접 감 잡기](<Interview#%EA%B8%B0%EC%88%A0-%EB%A9%B4%EC%A0%91-%EC%A4%80%EB%B9%84%ED%95%98%EA%B8%B0>) 👩🏻‍🏫
-
-------
-
-<br>
 
 ## 📌 Computer Science
 
@@ -377,12 +312,4 @@
 - [Javascript와 Node.js로 Git을 통해 협업하기](ETC/Collaborate%20with%20Git%20on%20Javascript%20and%20Node.js.md) 
 
 <br>
-
-## License
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgyoogle%2Ftech-interview-for-developer.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgyoogle%2Ftech-interview-for-developer?ref=badge_small)
-
-<br>
-
-[<img src="https://github.com/gyoogle/blog/blob/master/docs/.vuepress/public/images/BMC.png?raw=true" width="150px" height="30px">](https://www.buymeacoffee.com/gyoogle)
-
 
