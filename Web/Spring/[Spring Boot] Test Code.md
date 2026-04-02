@@ -1,5 +1,8 @@
 # [Spring Boot] Test Code
 
+> 참고: 본문 예제는 JUnit 4(`@RunWith`) 기반이다.
+> 최근 Spring Boot 프로젝트는 기본적으로 JUnit 5를 많이 사용하며, `@ExtendWith(SpringExtension.class)` 또는 슬라이스 테스트 어노테이션 조합을 사용한다.
+
 <br>
 
 #### 테스트 코드를 작성해야 하는 이유

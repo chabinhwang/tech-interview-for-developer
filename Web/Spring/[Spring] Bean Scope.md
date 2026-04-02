@@ -1,73 +1,66 @@
 # [Spring] Bean Scope
 
-<br>
+Bean Scope는 Spring 컨테이너가 Bean 인스턴스를 어떤 범위와 생명주기로 관리할지 결정하는 설정이다.
 
-![image](https://user-images.githubusercontent.com/34904741/139436386-d6af0eba-0fb2-4776-a01d-58ea459d73f7.png)
-
-<br>
-
-```
-Bean의 사용 범위를 말하는 Bean Scope의 종류에 대해 알아보자
-```
+기본값은 `singleton`이다.
 
 <br>
 
-Bean은 스프링에서 사용하는 POJO 기반 객체다.
+### 주요 Scope
 
-상황과 필요에 따라 Bean을 사용할 때 하나만 만들어야 할 수도 있고, 여러개가 필요할 때도 있고, 어떤 한 시점에서만 사용해야할 때가 있을 수 있다.
+#### singleton
 
-이를 위해 Scope를 설정해서 Bean의 사용 범위를 개발자가 설정할 수 있다.
+컨테이너당 하나의 인스턴스만 생성한다.
 
-<br>
+가장 기본적인 scope이며, 상태를 가지지 않는 서비스 객체에 많이 쓴다.
 
-우선 따로 설정을 해주지 않으면, Spring에서 Bean은 `Singleton`으로 생성된다. 싱글톤 패턴처럼 특정 타입의 Bean을 딱 하나만 만들고 모두 공유해서 사용하기 위함이다. 보통은 Bean을 이렇게 하나만 만들어 사용하는 경우가 대부분이지만, 요구사항이나 구현에 따라 아닐 수도 있을 것이다.
+#### prototype
 
-따라서 Bean Scope는 싱글톤 말고도 여러가지를 지원해준다.
+요청할 때마다 새 인스턴스를 만든다.
 
-<br>
+중요한 점은 prototype bean은 생성과 의존성 주입까지만 Spring이 관리하고, 그 이후 전체 라이프사이클 정리는 직접 책임져야 할 수 있다는 점이다.
 
-### Scope 종류
+#### request
 
-- #### singleton
+HTTP 요청마다 하나의 인스턴스를 만든다.
 
-  해당 Bean에 대해 IoC 컨테이너에서 단 하나의 객체로만 존재한다.
+#### session
 
-- #### prototype
+HTTP 세션마다 하나의 인스턴스를 만든다.
 
-  해당 Bean에 대해 다수의 객체가 존재할 수 있다.
+#### application
 
-- #### request
+`ServletContext` 범위로 하나의 인스턴스를 공유한다.
 
-  해당 Bean에 대해 하나의 HTTP Request의 라이프사이클에서 단 하나의 객체로만 존재한다.
+#### websocket
 
-- #### session
-
-  해당 Bean에 대해 하나의 HTTP Session의 라이프사이클에서 단 하나의 객체로만 존재한다.
-
-- #### global session
-
-  해당 Bean에 대해 하나의 Global HTTP Session의 라이프사이클에서 단 하나의 객체로만 존재한다. (Portlet 기반 웹 애플리케이션 전용, Spring 5부터는 application scope로 대체됨)
-
-> request, session, global session은 MVC 웹 어플리케이션에서만 사용함
+WebSocket 세션 범위로 하나의 인스턴스를 만든다.
 
 <br>
 
-Scope들은 Bean으로 등록하는 클래스에 어노테이션으로 설정해줄 수 있다.
+### 참고
+
+과거 문서에서 보이는 `globalSession`은 포틀릿 환경용 legacy scope라서, 일반적인 Spring MVC/Spring Boot 애플리케이션에서는 거의 쓰지 않는다.
+
+<br>
+
+### 예시
 
 ```java
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
- 
-@Scope("prototype")
+import org.springframework.stereotype.Component;
+
 @Component
+@Scope("prototype")
 public class UserController {
 }
 ```
 
 <br>
 
-<br>
+### 정리
 
-#### [참고 자료]
-
-- [링크](https://gmlwjd9405.github.io/2018/11/10/spring-beans.html)
+- 기본은 `singleton`
+- 상태 없는 공용 객체는 singleton
+- 요청/세션별 상태가 필요하면 web scope
+- `prototype`은 생성 이후 정리를 Spring이 끝까지 책임지지 않는다는 점을 기억해야 한다

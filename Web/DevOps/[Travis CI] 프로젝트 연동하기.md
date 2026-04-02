@@ -1,5 +1,8 @@
 # [Travis CI] 프로젝트 연동하기
 
+> 참고: 이 문서는 Travis CI 전용 설정 예제다.
+> 현재 GitHub 저장소에서는 GitHub Actions를 기본 CI로 선택하는 경우가 더 많지만, Travis CI 개념 자체는 여전히 유효하다.
+
 <br>
 
 <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbMIduW%2FbtrfWMtiPEC%2FENLpZFdHhIVcpV31IWNBcK%2Fimg.jpg">
