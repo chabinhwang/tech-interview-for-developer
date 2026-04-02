@@ -2,152 +2,126 @@
 
 ---
 
-fork( ), exec( ), wait( )와 같은 것들은 Process 생성과 제어를 위한 System call임.
+`fork()`, `exec()`, `wait()` 계열은 프로세스 생성과 제어를 설명할 때 가장 자주 나오는 시스템 콜이다.
 
-- fork, exec는 새로운 Process 생성과 관련이 되어 있다.
-- wait는 Process (Parent)가 만든 다른 Process(child) 가 끝날 때까지 기다리는 명령어임.
+- `fork()`: 현재 프로세스를 복제해 자식 프로세스를 만든다.
+- `exec()` 계열: 현재 프로세스의 실행 이미지 자체를 다른 프로그램으로 바꾼다.
+- `wait()` / `waitpid()`: 부모가 자식의 상태 변화를 기다리고 회수(reap)한다.
 
 ---
 
-##### Fork
+##### fork
 
-> 새로운 Process를 생성할 때 사용.
->
-> 그러나, 이상한 방식임.
+> 새로운 자식 프로세스를 생성할 때 사용한다.
+
+`fork()`가 호출되면 부모와 자식은 **같은 코드 지점부터** 각각 실행을 이어 간다. 즉, 자식이 `main()` 처음부터 다시 시작하는 것이 아니라 `fork()`가 반환된 직후부터 실행된다.
+
+다만 반환값이 다르기 때문에 부모와 자식이 서로 다른 분기를 탈 수 있다.
+
+- 부모에서의 반환값: 자식의 PID
+- 자식에서의 반환값: `0`
+- 실패 시: `-1`
+
+또한 부모와 자식은 "완전히 같은 프로세스 하나를 둘로 나눈 것"이 아니라, **초기 내용이 같은 별도 주소 공간**을 갖는다. 현대 운영체제는 보통 **copy-on-write(COW)** 로 구현하므로, `fork()` 시점에 메모리를 전부 즉시 복사하지 않는다.
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-int main(int argc, char *argv[]) {
-    printf("pid : %d", (int) getpid()); // pid : 29146
-    
-    int rc = fork();					// 주목
-    
-    if (rc < 0) {					    // (1) fork 실패
+int main(void) {
+    pid_t rc = fork();
+
+    if (rc < 0) {
+        perror("fork");
         exit(1);
+    } else if (rc == 0) {
+        printf("child pid = %d\n", (int)getpid());
+    } else {
+        printf("parent pid = %d, child pid = %d\n", (int)getpid(), (int)rc);
     }
-    else if (rc == 0) {					// (2) child 인 경우 (fork 값이 0)
-        printf("child (pid : %d)", (int) getpid());
-    }
-    else {								// (3) parent case
-        printf("parent of %d (pid : %d)", rc, (int)getpid());
-    }
+
+    return 0;
 }
 ```
 
-> pid : 29146
->
-> parent of 29147 (pid : 29146)
->
-> child (pid : 29147)
+부모와 자식 중 누가 먼저 출력할지는 스케줄러가 결정하므로 비결정적이다.
 
-을 출력함 (parent와 child의 순서는 non-deterministic함. 즉, 확신할 수 없음. scheduler가 결정하는 일임.)
+---
 
-[해석]
+##### wait / waitpid
 
-PID :  프로세스 식별자. UNIX 시스템에서는 PID는 프로세스에게 명령을 할 때 사용함.
+> 부모 프로세스가 자식의 상태 변화를 기다리는 시스템 콜
 
-Fork()가 실행되는 순간. 프로세스가 하나 더 생기는데, 이 때 생긴 프로세스(Child)는 fork를 만든 프로세스(Parent)와 (almost) 동일한 복사본을 갖게 된다. **<u>이 때 OS는 위와 똑같은 2개의 프로그램이 동작한다고 생각하고, fork()가 return될 차례라고 생각한다.</u>** 그 때문에 새로 생성된 Process (child)는 main에서 시작하지 않고, if 문부터 시작하게 된다.
+가장 흔한 경우는 "자식이 종료될 때까지 기다린 뒤 회수하는 것"이다.
 
-그러나, 차이점이 있었다. 바로 child와 parent의 fork() 값이 다르다는 점이다.
- 따라서, 완전히 동일한 복사본이라 할 수 없다. 
+- 자식이 아직 종료되지 않았으면 부모는 block될 수 있다.
+- 자식이 이미 종료되어 zombie 상태라면 즉시 반환하면서 자식을 회수한다.
+- `waitpid()`는 특정 자식을 기다리거나 옵션을 줄 수 있어서 실무에서 더 자주 쓰인다.
 
-> Parent의 fork()값 => child의 pid 값
->
-> Child의 fork()값 => 0
-
-Parent와 child의 fork 값이 다르다는 점은 매우 유용한 방식이다.
-
-그러나! Scheduler가 부모를 먼저 수행할지 아닐지 확신할 수 없다. 따라서 아래와 같이 출력될 수 있다.
-
-> pid : 29146
->
-> child (pid : 29147)
->
-> parent of 29147 (pid : 29146)
-
-----
-
-##### wait
-
-> child 프로세스가 종료될 때까지 기다리는 작업
-
-위의 예시에 int wc = wait(NULL)만 추가함.
-
-```C
+```c
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
-int main(int argc, char *argv[]) {
-    printf("pid : %d", (int) getpid()); // pid : 29146
-    
-    int rc = fork();					// 주목
-    
-    if (rc < 0) {					    // (1) fork 실패
+int main(void) {
+    pid_t rc = fork();
+
+    if (rc < 0) {
+        perror("fork");
         exit(1);
+    } else if (rc == 0) {
+        printf("child pid = %d\n", (int)getpid());
+        _exit(0);
+    } else {
+        pid_t wc = waitpid(rc, NULL, 0);
+        printf("parent pid = %d, waited child = %d\n", (int)getpid(), (int)wc);
     }
-    else if (rc == 0) {					// (2) child 인 경우 (fork 값이 0)
-        printf("child (pid : %d)", (int) getpid());
-    }
-    else {								// (3) parent case
-        int wc = wait(NULL)				// 추가된 부분
-        printf("parent of %d (wc : %d / pid : %d)", wc, rc, (int)getpid());
-    }
+
+    return 0;
 }
 ```
 
-> pid : 29146
->
-> child (pid : 29147)
->
-> parent of 29147 (wc : 29147 / pid : 29146)
+즉, `wait()`를 쓰면 "부모의 다음 코드가 실행되기 전에 자식 종료를 확인한다"는 보장을 얻을 수 있다.
 
-wait를 통해서, child의 실행이 끝날 때까지 기다려줌. parent가 먼저 실행되더라도, wait ()는 child가 끝나기 전에는 return하지 않으므로, 반드시 child가 먼저 실행됨.
-
-----
+---
 
 ##### exec
 
-단순 fork는 동일한 프로세스의 내용을 여러 번 동작할 때 사용함.
+`fork()`는 자식을 만들고, `exec()`는 **현재 프로세스의 실행 이미지 자체를 다른 프로그램으로 교체**한다.
 
-child에서는 parent와 다른 동작을 하고 싶을 때는 exec를 사용할 수 있음.
+중요한 점은 다음과 같다.
+
+- `exec()`는 **새 프로세스를 만들지 않는다.**
+- 성공하면 현재 프로세스의 코드/데이터/힙/스택/메모리 매핑이 새 프로그램 기준으로 다시 구성된다.
+- 프로세스 ID는 보통 유지된다.
+- `FD_CLOEXEC`가 설정되지 않은 파일 디스크립터는 열려 있을 수 있다.
+- 성공하면 `exec()` 뒤의 코드는 실행되지 않는다. 실패했을 때만 반환한다.
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <sys/wait.h>
+#include <unistd.h>
 
-int main(int argc, char *argv[]) {
-    printf("pid : %d", (int) getpid()); // pid : 29146
-    
-    int rc = fork();					// 주목
-    
-    if (rc < 0) {					    // (1) fork 실패
+int main(void) {
+    pid_t rc = fork();
+
+    if (rc < 0) {
+        perror("fork");
         exit(1);
+    } else if (rc == 0) {
+        execlp("ls", "ls", "-l", NULL);
+        perror("execlp");
+        _exit(1);
+    } else {
+        waitpid(rc, NULL, 0);
+        printf("parent done\n");
     }
-    else if (rc == 0) {					// (2) child 인 경우 (fork 값이 0)
-        printf("child (pid : %d)", (int) getpid());
-        char *myargs[3];
-        myargs[0] = strdup("wc");		// 내가 실행할 파일 이름
-        myargs[1] = strdup("p3.c");		// 실행할 파일에 넘겨줄 argument
-        myargs[2] = NULL;				// end of array
-        execvp(myarges[0], myargs);		// wc 파일 실행.
-        printf("this shouldn't print out") // 실행되지 않음.
-    }
-    else {								// (3) parent case
-        int wc = wait(NULL)				// 추가된 부분
-        printf("parent of %d (wc : %d / pid : %d)", wc, rc, (int)getpid());
-    }
+
+    return 0;
 }
 ```
 
-exec가 실행되면, 
-
-execvp( 실행 파일, 전달 인자 ) 함수는, code segment 영역에 실행 파일의 코드를 읽어와서 덮어 씌운다.
-
-씌운 이후에는,  heap, stack, 다른 메모리 영역이 초기화되고, OS는 그냥 실행한다. 즉, 새로운 Process를 생성하지 않고, 현재 프로그램에 wc라는 파일을 실행한다. 그로인해서, execvp() 이후의 부분은 실행되지 않는다.
+셸이 명령을 실행할 때도 보통 `fork()`로 자식을 만든 뒤, 자식에서 `exec()`를 호출하는 패턴을 사용한다.
