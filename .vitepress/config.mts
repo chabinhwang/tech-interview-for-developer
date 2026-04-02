@@ -8,6 +8,7 @@ export default defineConfig({
   title: '개발자 면접 백과사전',
   description: '[개선버전]신입 개발자 전공 지식 & 기술 면접 백과사전',
   lang: 'ko-KR',
+  base: '/tech-interview-for-developer/',
   cleanUrls: true,
   srcExclude: buildSourceExcludes(),
   ignoreDeadLinks: true,
