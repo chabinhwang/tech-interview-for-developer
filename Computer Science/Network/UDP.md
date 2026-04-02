@@ -1,107 +1,105 @@
-### 2019.08.26.(월) [BYM] UDP란? 
+### UDP란?
 
 ---
 
 #### 들어가기 전
 
-- UDP 통신이란?
+- UDP는 `User Datagram Protocol`의 약자다.
+- 전송 계층(Transport Layer)의 `비연결형(connectionless)`, `best-effort`, `메시지 지향(message-oriented)` 프로토콜이다.
+- TCP처럼 연결을 맺거나, 순서 보장/재전송/혼잡 제어를 기본 제공하지 않는다.
 
-  - User Datagram Protocol의 약자로 데이터를 데이터그램 단위로 처리하는 프로토콜이다. 
-  - 비연결형, 신뢰성 없는 전송 프로토콜이다.
-  - 데이터그램 단위로 쪼개면서 전송을 해야하기 때문에 전송 계층이다.
-  - Transport layer에서 사용하는 프로토콜.
+즉, UDP는 애플리케이션에 다음 정도만 제공한다.
 
-- TCP와 UDP는 왜 나오게 됐는가?
+- 포트 번호 기반 다중화
+- 데이터그램 경계 유지
+- 체크섬 기반 오류 검출
 
-  1. IP의 역할은 Host to Host (장치 to 장치)만을 지원한다. 장치에서 장치로 이동은 IP로 해결되지만, 하나의 장비안에서 수많은 프로그램들이 통신을 할 경우에는 IP만으로는 한계가 있다.
+그 대신 아래 기능은 애플리케이션 또는 상위 프로토콜이 직접 책임져야 한다.
 
-  2. 또한, IP에서 오류가 발생한다면 ICMP에서 알려준다. 하지만 ICMP는 알려주기만 할 뿐 대처를 못하기 때문에 IP보다 위에서 처리를 해줘야 한다.
+- 신뢰성
+- 순서 보장
+- 흐름 제어
+- 혼잡 제어
 
-  - 1번을 해결하기 위하여 포트 번호가 나오게 됐고, 2번을 해결하기 위해 상위 프로토콜인 TCP와 UDP가 나오게 되었다.
+<br>
 
-  * *ICMP : 인터넷 제어 메시지 프로토콜로 네트워크 컴퓨터 위에서 돌아가는 운영체제에서 오류 메시지를 전송받는데 주로 쓰임
+#### UDP는 왜 사용할까?
 
-- 그렇다면 TCP와 UDP가 어떻게 오류를 해결하는가?
+- 연결 설정(3-way handshake)이 없어 초기 오버헤드가 작다.
+- 메시지 단위 경계가 유지된다.
+- 지연에 민감한 서비스에서 일부 손실을 감수하는 편이 더 나을 수 있다.
+- 필요하면 애플리케이션이 자신에게 맞는 재전송/순서 제어 정책을 직접 설계할 수 있다.
 
-  - TCP : 데이터의 분실, 중복, 순서가 뒤바뀜 등을 자동으로 보정해줘서 송수신 데이터의 정확한 전달을 할 수 있도록 해준다.
-  - UDP : IP가 제공하는 정도의 수준만을 제공하는 간단한 IP 상위 계층의 프로토콜이다. TCP와는 다르게 에러가 날 수도 있고, 재전송이나 순서가 뒤바뀔 수도 있어서 이 경우, 어플리케이션에서 처리하는 번거로움이 존재한다.
+대표 예시:
 
-- UDP는 왜 사용할까?
+- 실시간 스트리밍
+- VoIP
+- 온라인 게임
+- DNS
+- QUIC(HTTP/3의 기반 전송)
 
-  - UDP의 결정적인 장점은 데이터의 신속성이다. 데이터의 처리가 TCP보다 빠르다.
-  - 주로 실시간 방송과 온라인 게임에서 사용된다. 네트워크 환경이 안 좋을때, 끊기는 현상을 생각하면 된다.
-
-- DNS(Domain Name System)에서 UDP를 사용하는 이유
-
-  - Request의 양이 작음 -> UDP Request에 담길 수 있다.
-  - 3 way handshaking으로 연결을 유지할 필요가 없다. (오버헤드 발생)
-  - Request에 대한 손실은 Application Layer에서 제어가 가능하다.
-  - DNS : port 53번
-  - But, TCP를 사용할 때가 있다! 크기가 512(UDP 제한)이 넘을 때, TCP를 사용해야한다. 
+`UDP가 무조건 TCP보다 빠르다`고 단정하면 안 된다. 프로토콜 자체의 상태와 오버헤드는 더 적지만, 실제 성능은 애플리케이션 설계와 네트워크 상황에 따라 달라진다.
 
 <br>
 
 #### 1. UDP Header
 
 - <img src='https://t1.daumcdn.net/cfile/tistory/272A5A385759267B36'>
-  - Source port : 시작 포트
-  - Destination port : 도착지 포트
-  - Length : 길이
-  - _Checksum_ : 오류 검출
-    - 중복 검사의 한 형태로, 오류 정정을 통해 공간이나 시간 속에서 송신된 자료의 무결성을 보호하는 단순한 방법이다.
+  - `Source Port`: 송신 포트
+  - `Destination Port`: 수신 포트
+  - `Length`: UDP 헤더 + 데이터 길이
+  - `Checksum`: 오류 검출
+
+UDP 헤더는 매우 단순하다. 그래서 TCP보다 제공 기능이 적고, 그만큼 전송 제어 로직도 단순하다.
+
+참고:
+
+- IPv4에서는 UDP 체크섬이 선택 사항이지만, 실제 구현에서는 보통 사용한다.
+- IPv6에서는 UDP 체크섬이 사실상 필수다.
 
 <br>
 
-- 이렇게 간단하므로, TCP 보다 용량이 가볍고 송신 속도가 빠르게 작동됨. 
+#### 2. DNS가 왜 UDP를 많이 사용하는가?
 
-- 그러나 확인 응답을 못하므로, TCP보다 신뢰도가 떨어짐. 
-- UDP는 비연결성, TCP는 연결성으로 정의할 수 있음.
+전통적인 DNS 질의/응답은 `작은 요청 1개 + 응답 1개` 구조가 많았기 때문에 UDP가 잘 맞았다.
+
+이유는 다음과 같다.
+
+1. 연결 설정 없이 바로 질의할 수 있다.
+2. 단문 질의/응답에는 TCP보다 오버헤드가 작다.
+3. 손실 시 애플리케이션 차원에서 타임아웃 후 재질의할 수 있다.
+
+기본 포트는 `53`이다.
 
 <br>
 
-#### DNS과 UDP 통신 프로토콜을 사용함.
+#### 3. 하지만 DNS는 TCP도 반드시 중요하다
 
-DNS는 데이터를 교환하는 경우임
+`DNS = UDP만 사용`이라고 이해하면 현재 기준으로는 부정확하다.
 
-이때, TCP를 사용하게 되면, 데이터를 송신할 때까지 세션 확립을 위한 처리를 하고, 송신한 데이터가 수신되었는지 점검하는 과정이 필요하므로, Protocol overhead가 UDP에 비해서 큼.
+- 응답이 잘린 경우(`TC` 비트)
+- `AXFR`, `IXFR` 같은 zone transfer
+- 큰 응답 처리
+- 보호된 DNS 전송(DoT/DoH)
 
-------
+같은 경우에는 TCP가 사용되거나 필수다.
 
-DNS는 Application layer protocol임.
+또한 `EDNS(0)`를 사용하면 전통적인 512바이트 한계를 넘는 UDP payload 크기를 협상할 수 있다. 다만 너무 큰 UDP 응답은 IP 단편화 문제를 일으킬 수 있어, 실제 운영에서는 적절한 크기 조정과 TCP fallback이 중요하다.
 
-모든 Application layer protocol은 TCP, UDP 중 하나의 Transport layer protocol을 사용해야 함.
+<br>
 
-(TCP는 reliable, UDP는 not reliable임) / DNS는 reliable해야할 것 같은데 왜 UDP를 사용할까?
+#### 정리
 
+- `TCP`: 연결 지향, 신뢰성/순서 보장 제공
+- `UDP`: 비연결형, 최소 기능만 제공
 
-
-사용하는 이유 
-
-1. TCP가 3-way handshake를 사용하는 반면, UDP는 connection 을 유지할 필요가 없음.
-
-2. DNS request는 UDP segment에 꼭 들어갈 정도로 작음.
-
-   DNS query는 single UDP request와 server로부터의 single UDP reply로 구성되어 있음.
-
-3. UDP는 not reliable이나, reliability는 application layer에 추가될 수 있음.
-   (Timeout 추가나, resend 작업을 통해)
-
-DNS는 UDP를 53번 port에서 사용함.
-
-------
-
-그러나 TCP를 사용하는 경우가 있음.
-
-Zone transfer 을 사용해야하는 경우에는 TCP를 사용해야 함.
-
-(Zone Transfer : DNS 서버 간의 요청을 주고 받을 떄 사용하는 transfer)
-
-만약에 데이터가 512 bytes를 넘는 경우 TCP로 전환함. (단, EDNS0 확장을 사용하면 UDP에서도 최대 4096바이트까지 전송 가능.) TCP로 전환되는 주된 경우는 응답에 TC(Truncation) 비트가 설정되었을 때와 Zone Transfer 시이다.
+UDP는 기능이 적은 대신 유연하다. 그래서 오늘날에도 DNS, 실시간 미디어, QUIC 같은 현대 프로토콜의 기반으로 널리 쓰인다.
 
 <br>
 
 [ref]<br>
 
-- <https://www.geeksforgeeks.org/why-does-dns-use-udp-and-not-tcp/>
-- <https://support.microsoft.com/en-us/help/556000>
-- <https://www.scaler.com/topics/domain-name-system/>
+- RFC 768
+- RFC 8085
+- RFC 6891
+- RFC 7766

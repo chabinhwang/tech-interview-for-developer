@@ -1,40 +1,59 @@
 ## Vue.js와 React의 차이
 
-<img src="https://miro.medium.com/max/704/1*tqpZoG9qMeVd9j7KhAnsBg.png">
+Vue와 React는 모두 컴포넌트 기반 UI를 만들기 위한 기술이지만, 설계 철학과 기본 제공 범위가 다르다.
 
 <br>
 
-##### 개발 CLI
+### 공통점
 
-- Vue.js : vue-cli
-- React : create-react-app
-
-##### CSS 파일 존재 유무
-
-- Vue.js : 없음. style이 실제 컴포넌트 파일 안에서 정의됨
-- React : 파일이 존재. 해당 파일을 통해 style 적용
-
-##### 데이터 변이
-
-- Vue.js : 반드시 데이터 객체를 생성한 이후 data를 업데이트 할 수 있음
-- React : state 객체를 만들고, 업데이트에 조금 더 작업이 필요
-
-```
-name: kim 값을 lee로 바꾸려면
-Vue.js : this.name = 'lee'
-React : this.setState({name:'lee'})
-```
-
-Vue에서는 data를 업데이트할 때마다 setState를 알아서 결합해분다.
+- 컴포넌트 기반 개발
+- 선언형 UI
+- 상태 변화에 따른 리렌더링
+- 생태계 확장 가능
 
 <br>
 
+### 차이점
+
+#### 1. 정체성
+
+- `React`: 사용자 인터페이스를 만들기 위한 라이브러리 성격이 강하다.
+- `Vue`: 점진적으로 도입 가능한 프레임워크 성격이 강하다.
+
+React는 라우팅, 상태 관리, 메타 프레임워크 선택을 생태계와 함께 조합하는 경우가 많고, Vue는 Vue Router, Pinia 같은 공식 생태계 조합이 비교적 명확하다.
+
+#### 2. 템플릿 작성 방식
+
+- `React`: 주로 JSX를 사용한다.
+- `Vue`: 템플릿 문법을 기본으로 쓰되, render function/JSX도 가능하다.
+
+#### 3. 반응성 모델
+
+- `React`: 상태를 setter로 교체하면서 업데이트 흐름을 명시적으로 다루는 편이다.
+- `Vue`: reactive/ref 같은 반응성 시스템으로 변경을 추적한다.
+
+React에서 상태를 직접 mutate하지 않고 새 값으로 교체하는 것이 일반적이고, Vue는 반응성 시스템이 추적할 수 있는 방식으로 상태를 관리한다.
+
+#### 4. 스타일링
+
+- `Vue`: Single File Component 안에 `<style>`을 둘 수 있지만, 반드시 그래야 하는 것은 아니다.
+- `React`: 일반 CSS, CSS Modules, CSS-in-JS 등 다양한 방식을 쓴다.
+
+즉, "Vue는 CSS 파일이 없고 React는 있다"처럼 구분하는 것은 정확하지 않다.
+
 <br>
 
+### 어느 쪽이 더 좋은가
 
+절대적인 우열보다 팀의 선호와 생태계 선택이 더 중요하다.
 
-#### [참고 사항]
+- 공식 패턴이 분명하고 템플릿 기반 개발을 선호하면 Vue가 편할 수 있다.
+- JSX 중심, 폭넓은 생태계, 메타 프레임워크 선택 자유도를 선호하면 React가 잘 맞을 수 있다.
 
-- [링크]( [https://medium.com/@erwinousy/%EB%82%9C-react%EC%99%80-vue%EC%97%90%EC%84%9C-%EC%99%84%EC%A0%84%ED%9E%88-%EA%B0%99%EC%9D%80-%EC%95%B1%EC%9D%84-%EB%A7%8C%EB%93%A4%EC%97%88%EB%8B%A4-%EC%9D%B4%EA%B2%83%EC%9D%80-%EA%B7%B8-%EC%B0%A8%EC%9D%B4%EC%A0%90%EC%9D%B4%EB%8B%A4-5cffcbfe287f](https://medium.com/@erwinousy/난-react와-vue에서-완전히-같은-앱을-만들었다-이것은-그-차이점이다-5cffcbfe287f) )
-- [링크](https://kr.vuejs.org/v2/guide/comparison.html)
+<br>
 
+### 요약
+
+- React는 UI 라이브러리 성격이 강하고, Vue는 점진적 프레임워크 성격이 강하다.
+- 둘 다 현대 웹 개발에서 충분히 강력하다.
+- 스타일링, 상태 관리, 라우팅 방식은 "불가능/가능"의 차이가 아니라 `기본 선택과 생태계 관습`의 차이에 가깝다.

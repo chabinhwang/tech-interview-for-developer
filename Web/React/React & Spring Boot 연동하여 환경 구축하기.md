@@ -1,5 +1,8 @@
 ## React & Spring Boot 연동해보기!
 
+> 참고: 이 문서는 2019년 기준의 `React + 커스텀 webpack + JSP` 예제를 설명한다.
+> 현재는 보통 `Vite` 또는 React 메타 프레임워크를 사용하고, React 18 이상에서는 `ReactDOM.render` 대신 `createRoot`를 사용한다.
+
 <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FANf2v%2Fbtqw4m6O105%2F5YoRpX1xO9NGkyjwbOKFV1%2Fimg.png">
 
 작성일 : 2019.07.29

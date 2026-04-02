@@ -1,5 +1,8 @@
 ## Vue.js + Firebase로 이메일 회원가입/로그인 구현
 
+> 참고: 아래 코드는 Vue 2 + Vue CLI + Firebase namespaced SDK(v8 계열) 기준 예제다.
+> 현재 Firebase Web SDK는 `getAuth`, `createUserWithEmailAndPassword` 같은 모듈형(v9+) import 방식을 많이 사용한다.
+
 ***2019.07.08 (김규석)***
 
 <br>
@@ -677,4 +680,3 @@ createUserWithEmailAndPassword 메소드는 onResolve, onReject 콜백과 파이
 <br>
 
 이제 로그인이 되었을 때 보여줘야 하는 화면으로 이동을 하거나 로그인한 사람이 관리자면 따로 페이지를 구성하거나를 구현하고 싶은 계획에 따라 만들어가면 된다.
-

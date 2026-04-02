@@ -1,5 +1,8 @@
 ## Vue.js + Firebase로 페이스북(facebook) 로그인 연동하기
 
+> 참고: 아래 예제는 Vue 2와 Firebase namespaced SDK(v8 계열) 기준이다.
+> 현재는 Firebase 모듈형 SDK(v9+)와 최신 Meta/Facebook 개발자 콘솔 절차에 맞춰 코드를 조정해야 한다.
+
 <img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FbDIKm5%2FbtqwCrAc0kZ%2FtkCKCfOi1OLeyIkI8vmpe1%2Fimg.png">
 
 <br>

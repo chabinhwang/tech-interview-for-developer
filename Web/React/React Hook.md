@@ -1,63 +1,73 @@
-# React Hook 
+# React Hook
 
-> useState(), useEffect() 정의
+Hook은 함수형 컴포넌트에서 상태와 React 기능을 사용할 수 있게 해주는 API다.
 
-<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FcbKGwj%2FbtqC5pwunG7%2FYkaJ6YKK5YSESx7Gs2x410%2Fimg.jpg">
-
-<br>
-
-리액트의 Component는 '클래스형'과 '함수형'으로 구성되어 있다.
-
-기존의 클래스형 컴포넌트에서는 몇 가지 어려움이 존재한다.
-
-1. 상태(State) 로직 재사용 어려움
-2. 코드가 복잡해짐
-3. 관련 없는 로직들이 함께 섞여 있어 이해가 힘듬
-
-이와 같은 어려움을 해결하기 위해, 'Hook'이 도입되었다. (16.8 버전부터)
+클래스 컴포넌트를 완전히 금지하는 개념은 아니지만, 현재 React에서는 함수형 컴포넌트 + Hook이 기본 패턴에 가깝다.
 
 <br>
 
-### Hook
+### Hook 규칙
 
-- 함수형 컴포넌트에서 State와 Lifecycle 기능을 연동해주는 함수
-- '클래스형'에서는 동작하지 않으며, '함수형'에서만 사용 가능
+- Hook은 컴포넌트 최상위에서 호출한다.
+- 반복문, 조건문, 중첩 함수 안에서 호출하지 않는다.
+- React 함수 컴포넌트나 Custom Hook 안에서만 호출한다.
 
 <br>
 
-#### useState
+### useState
 
-기본적인 Hook으로 상태관리를 해야할 때 사용하면 된다.
-
-상태를 변경할 때는, `set`으로 준 이름의 함수를 호출한다. 
+컴포넌트 내부 상태를 선언할 때 사용한다.
 
 ```jsx
-const [posts, setPosts] = useState([]); // 비구조화 할당 문법
+const [count, setCount] = useState(0)
 ```
 
-`useState([]);`와 같이 `( )` 안에 초기화를 설정해줄 수 있다. 현재 예제는 빈 배열을 만들어 둔 상황인 것이다.
+- `count`: 현재 상태 값
+- `setCount`: 상태 변경 함수
+
+상태를 바꿀 때는 기존 값을 직접 수정하는 대신 setter를 사용한다.
 
 <br>
 
-#### useEffect
+### useEffect
 
-컴포넌트가 렌더링 될 때마다 특정 작업을 수행하도록 설정할 수 있는 Hook
+`useEffect`는 렌더링 결과를 기준으로 외부 시스템과 동기화할 때 사용한다.
 
-> '클래스' 컴포넌트의 componentDidMount()와 componentDidUpdate()의 역할을 동시에 한다고 봐도 된다.
+예)
+
+- 네트워크 요청 시작
+- 이벤트 리스너 등록/해제
+- 타이머 설정/정리
+- DOM 외부 API 연동
 
 ```jsx
 useEffect(() => {
-    console.log("렌더링 완료");
-    console.log(posts);
-});
+  const id = setInterval(() => {
+    console.log('tick')
+  }, 1000)
+
+  return () => clearInterval(id)
+}, [])
 ```
 
-posts가 변경돼 리렌더링이 되면, useEffect가 실행된다.
+#### dependency array
+
+- 없음: 렌더링 후마다 실행
+- `[]`: 마운트 시 한 번 실행되고, 언마운트 시 cleanup
+- `[value]`: `value`가 바뀔 때만 다시 실행
+
+#### 자주 하는 오해
+
+`useEffect`를 "클래스의 componentDidMount + componentDidUpdate + componentWillUnmount 묶음"으로만 외우면 실전에서 오용하기 쉽다.
+
+핵심은 `외부 시스템과 동기화가 필요한가?`다.
+
+단순히 파생 가능한 값을 state에 다시 넣는 용도라면 effect가 필요 없는 경우가 많다.
 
 <br>
 
-<br>
+### 요약
 
-#### [참고자료]
-
-- [링크](https://ko.reactjs.org/docs/hooks-intro.html)
+- `useState`는 상태 선언
+- `useEffect`는 외부 시스템 동기화
+- Hook은 함수형 컴포넌트 최상위에서만 호출
