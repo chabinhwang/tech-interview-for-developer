@@ -1,6 +1,6 @@
 # tech-interview-for-developer
 
-### 👶🏻 신입 개발자 전공 지식 & 기술 면접 백과사전 📖
+### 👶🏻 [개선버전]신입 개발자 전공 지식 & 기술 면접 백과사전 📖
 
 ## 📌 Computer Science
 

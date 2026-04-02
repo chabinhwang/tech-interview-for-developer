@@ -1,3 +1,12 @@
-# Computer Science
+# 💻 Computer Science (컴퓨터 공학)
 
-Computer Architecture, Data Structure, Database, Network, Operating System, and Software Engineering topics are organized in the left sidebar.
+개발자 인터뷰에서 가장 기본이 되며 중요한 **컴퓨터 공학 전공 지식**을 다루는 공간입니다.
+좌측 사이드바를 통해 아래의 세부 카테고리별 개념을 확인하실 수 있습니다.
+
+### 📚 세부 카테고리
+*   **Computer Architecture (컴퓨터 구조):** CPU, 메모리, 캐시 등 컴퓨터의 근간을 이루는 하드웨어 동작 원리
+*   **Data Structure (자료구조):** 배열, 리스트, 트리, 해시 등 데이터를 효율적으로 다루기 위한 구조
+*   **Database (데이터베이스):** 트랜잭션, 격리 수준, 인덱스, 정규화 등 데이터 저장과 무결성 유지 기법
+*   **Network (네트워크):** TCP/IP, OSI 7계층, HTTP/HTTPS 등 네트워크 통신 프로토콜과 원리
+*   **Operating System (운영체제):** 프로세스와 스레드, 스케줄링, 메모리 관리, 데드락 등 커널의 동작 원리
+*   **Software Engineering (소프트웨어 공학):** TDD, 애자일, 객체 지향, 디자인 패턴 등 소프트웨어 설계론

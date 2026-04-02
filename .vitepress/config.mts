@@ -6,7 +6,7 @@ const { nav, sidebar } = buildVitePressContentMap()
 
 export default defineConfig({
   title: 'tech-interview-for-developer',
-  description: '신입 개발자 전공 지식 & 기술 면접 백과사전',
+  description: '[개선버전]신입 개발자 전공 지식 & 기술 면접 백과사전',
   lang: 'ko-KR',
   cleanUrls: true,
   srcExclude: buildSourceExcludes(),
