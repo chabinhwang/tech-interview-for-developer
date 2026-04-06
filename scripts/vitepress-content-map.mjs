@@ -264,9 +264,42 @@ function buildDirectoryGroup(dirRelativePath, text, options) {
 
 function buildPageItem(relativePath) {
   return {
-    text: path.basename(relativePath, '.md'),
+    text: resolveSidebarText(relativePath),
     link: toRoute(relativePath)
   }
+}
+
+function resolveSidebarText(relativePath) {
+  const absolutePath = path.join(repoRoot, relativePath)
+
+  try {
+    const content = fs.readFileSync(absolutePath, 'utf8')
+    const frontmatterTitle = extractFrontmatterTitle(content)
+
+    if (frontmatterTitle) {
+      return frontmatterTitle
+    }
+  } catch {
+    // Fallback to file name when the file cannot be read.
+  }
+
+  return path.basename(relativePath, '.md')
+}
+
+function extractFrontmatterTitle(content) {
+  const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n/)
+
+  if (!frontmatterMatch) {
+    return null
+  }
+
+  const titleMatch = frontmatterMatch[1].match(/^title:\s*(.+)$/m)
+
+  if (!titleMatch) {
+    return null
+  }
+
+  return titleMatch[1].trim().replace(/^['\"]|['\"]$/g, '')
 }
 
 function findOverviewFile(absoluteDirectory) {

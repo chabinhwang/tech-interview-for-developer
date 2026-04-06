@@ -1,3 +1,7 @@
+---
+title: Memory & Cache
+---
+
 ### Memory & Cache
 
 > 메인 메모리는 CPU가 직접 접근하는 주기억장치다.
