@@ -9,10 +9,6 @@
 
 <br>
 
-<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fda50Yz%2Fbtq0Dsje4ZV%2FlGe8H8nZgdBdgFvo7IczS0%2Fimg.png">
-
-<br>
-
 ## Blocking / Non-blocking
 
 함수 A가 함수 B를 호출한다고 하자.
